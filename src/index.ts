@@ -5,8 +5,8 @@ import routes from "./routes";
 
 const app: express.Application = express();
 const urlList = [
-  "http://localhost:5174",
-  "https://afrj-crud-operations.netlify.app",
+  "http://localhost:5173",
+  "https://fs-daycare.netlify.app",
 ];
 const corsOptions: CorsOptions = {
   origin: function (origin, callback) {
