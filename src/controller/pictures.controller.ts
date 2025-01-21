@@ -60,6 +60,13 @@ async function deletePictures(req: Request, res: Response) {
   }
 }
 
-async function validatePictures(req: Request, res: Response) {}
+async function validatePictures(req: Request, res: Response) {
+  const { authPassword } = req.body;
+  if (authPassword === process.env.AUTH_PASSWORD) {
+    res.status(200).json({ message: "Auth granted!" });
+  } else {
+    res.status(401).json({ message: "Wrong password!" });
+  }
+}
 
-export { getPictures, postPictures, deletePictures };
+export { getPictures, postPictures, deletePictures, validatePictures };
