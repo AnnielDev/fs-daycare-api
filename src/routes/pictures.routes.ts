@@ -10,7 +10,7 @@ const router: express.Router = express.Router();
 
 // GET
 
-router.get("/getPicture", getPictures);
+router.get("/getPictures", getPictures);
 
 // POST
 
