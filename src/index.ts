@@ -1,9 +1,9 @@
 import express from "express";
+import dotenv from "dotenv";
 import cors, { CorsOptions } from "cors";
 import routes from "./routes";
-
+dotenv.config();
 const app: express.Application = express();
-process.loadEnvFile();
 const urlList = ["http://localhost:5173", "https://fs-daycare.netlify.app"];
 const corsOptions: CorsOptions = {
   origin: function (origin, callback) {
