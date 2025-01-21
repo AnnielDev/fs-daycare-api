@@ -4,17 +4,17 @@ import cors, { CorsOptions } from "cors";
 import routes from "./routes";
 
 const app: express.Application = express();
-//const urlList = ["http://localhost:5173", "https://fs-daycare.netlify.app"];
-// const corsOptions: CorsOptions = {
-//   origin: function (origin, callback) {
-//     if (origin && urlList.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
-app.use(cors());
+const urlList = ["http://localhost:5173", "https://fs-daycare.netlify.app"];
+const corsOptions: CorsOptions = {
+  origin: function (origin, callback) {
+    if (origin && urlList.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api", routes);
 
