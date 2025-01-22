@@ -29,46 +29,80 @@ async function getLatestPictures(req: Request, res: Response) {
     });
     res.status(200).json({ images: result.resources });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error retrieving latest pictures from Cloudinary.",
-        error,
-      });
+    res.status(500).json({
+      message: "Error retrieving latest pictures from Cloudinary.",
+      error,
+    });
   }
 }
 
-function postPictures(req: Request, res: Response) {
-  try {
-    upload.single("file")(req, res, async (err) => {
-      if (err) {
-        return res
-          .status(400)
-          .json({ error: err, message: "Error uploading file." });
-      }
+// function postPictures(req: Request, res: Response) {
+//   try {
+//     upload.single("file")(req, res, async (err) => {
+//       if (err) {
+//         return res
+//           .status(400)
+//           .json({ error: err, message: "Error uploading file." });
+//       }
 
-      const image = req.file;
-      if (image) {
-        try {
-          const result = await cloudinary.v2.uploader.upload(image.path, {
-            folder: "",
-            resource_type: "image",
-          });
-          res
-            .status(200)
-            .json({ message: "File uploaded successfully.", result });
-        } catch (error: any) {
-          res
-            .status(500)
-            .json({ error, message: "Error uploading to Cloudinary." });
-        }
-      } else {
-        res.status(400).json({ message: "No file uploaded." });
+//       const image = req.file;
+//       if (image) {
+//         try {
+//           const result = await cloudinary.v2.uploader.upload(image.path, {
+//             folder: "",
+//             resource_type: "image",
+//           });
+//           res
+//             .status(200)
+//             .json({ message: "File uploaded successfully.", result });
+//         } catch (error: any) {
+//           res
+//             .status(500)
+//             .json({ error, message: "Error uploading to Cloudinary." });
+//         }
+//       } else {
+//         res.status(400).json({ message: "No file uploaded." });
+//       }
+//     });
+//   } catch (error: any) {
+//     res.status(500).json({ error: error });
+//   }
+// }
+async function postPictures(req: Request, res: Response) {
+  upload.single("file")(req, res, async (err) => {
+    if (err) {
+      return res
+        .status(400)
+        .json({ error: err, message: "Error uploading file." });
+    }
+
+    const image = req.file;
+    if (image) {
+      try {
+        await cloudinary.v2.uploader
+          .upload_stream(
+            { folder: "", resource_type: "image" },
+            (error, result) => {
+              if (error) {
+                return res
+                  .status(500)
+                  .json({ error, message: "Error uploading to Cloudinary." });
+              }
+              res
+                .status(200)
+                .json({ message: "File uploaded successfully.", result });
+            }
+          )
+          .end(image.buffer);
+      } catch (error: any) {
+        res
+          .status(500)
+          .json({ error, message: "Error uploading to Cloudinary." });
       }
-    });
-  } catch (error: any) {
-    res.status(500).json({ error: error });
-  }
+    } else {
+      res.status(400).json({ message: "No file uploaded." });
+    }
+  });
 }
 
 async function deletePictures(req: Request, res: Response) {
