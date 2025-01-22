@@ -4,6 +4,7 @@ import {
   getPictures,
   postPictures,
   validatePictures,
+  getLatestPictures,
 } from "../controller/pictures.controller";
 
 const router: express.Router = express.Router();
@@ -11,6 +12,8 @@ const router: express.Router = express.Router();
 // GET
 
 router.get("/getPictures", getPictures);
+router.get("/getLatestPictures", getLatestPictures);
+
 
 // POST
 

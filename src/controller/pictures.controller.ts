@@ -17,6 +17,26 @@ async function getPictures(req: Request, res: Response) {
   }
 }
 
+async function getLatestPictures(req: Request, res: Response) {
+  try {
+    const result = await cloudinary.v2.api.resources({
+      type: "upload",
+      prefix: "",
+      resource_type: "image",
+      max_results: 7,
+      sort_by: { created_at: "desc" },
+    });
+    res.status(200).json({ images: result.resources });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Error retrieving latest pictures from Cloudinary.",
+        error,
+      });
+  }
+}
+
 function postPictures(req: Request, res: Response) {
   try {
     upload.single("file")(req, res, async (err) => {
@@ -69,4 +89,10 @@ async function validatePictures(req: Request, res: Response) {
   }
 }
 
-export { getPictures, postPictures, deletePictures, validatePictures };
+export {
+  getPictures,
+  postPictures,
+  deletePictures,
+  validatePictures,
+  getLatestPictures,
+};
