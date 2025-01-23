@@ -8,7 +8,7 @@ async function getPictures(req: Request, res: Response) {
       type: "upload",
       prefix: "",
       resource_type: "image",
-      max_results: 2000,
+      max_results: 5000,
     });
     res.status(200).json({ images: result.resources });
   } catch (error) {
